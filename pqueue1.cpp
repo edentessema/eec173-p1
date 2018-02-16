@@ -1,7 +1,7 @@
 /*
-
 FILE: pqueue1.cpp
 DESCRIPTION: This file implements the class PriorityQueue. 
+AUTHOR: Alysia Iglesias
 */
 
 #include "stdafx.h"		// Includes the standard includes 
