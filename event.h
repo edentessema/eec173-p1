@@ -16,6 +16,7 @@ public:
   char getType(void) { return event_type; }
   double getArrivalTime(void) { return arrival_time; }
   double getServiceTime(void) { return service_time; }
+  double getDepartureTime(void) { return departure_time; }
 
 private:
   char event_type;
