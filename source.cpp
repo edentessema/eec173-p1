@@ -6,7 +6,15 @@
 int main() 
 {
   // Initialize variables and data structures
-  int current_time = 0;
+  int length = 0;           // Number of packets waiting in the queue (including packet in transmission)
+  int time = 0;             // Current time
+  
+  int service_rate = 0;
+  int arrival_rate = 0;
+  
+  Event* a1 = new Arrival();
+  
+  
   
   // Generate event data
   for ( i = 0; i < 100000; ++i ) {
