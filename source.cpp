@@ -80,14 +80,14 @@ int main()
       updateStats();
       --length;
       
-        if (length == 0) break;
+      if (length == 0) break;
         
-        else {
-         buffer->dequeue();
-         double curr_departure_time = time + curr_event->getServiceTime();
-         Event *curr_departure = new Event(curr_departure_time);
-         GEL->insert(curr_departure);
-        }
+      else {
+        buffer->dequeue();
+        double curr_departure_time = time + curr_event->getServiceTime();
+        Event *curr_departure = new Event(curr_departure_time);
+        GEL->insert(curr_departure);
+       }
       
     } // end (2)
   
