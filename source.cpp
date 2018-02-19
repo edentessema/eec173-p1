@@ -59,7 +59,7 @@ int main()
         
         // Queue is full so drop the packet
         else
-          ++dropped_packet;
+          ++dropped_packets;
         
         ++length;
         updateStats();          
