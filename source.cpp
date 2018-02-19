@@ -84,15 +84,16 @@ int main()
         
       else {
         buffer->dequeue();
-        double curr_departure_time = time + curr_event->getServiceTime();
-        Event *curr_departure = new Event(curr_departure_time);
-        GEL->insert(curr_departure);
+        double curr_service_time = curr_event->getServiceTime();
+        double curr_departure_time = time + curr_service_time; 
+        Event *curr_departure = new Event('d', 0, curr_service_time, curr_departure_time);
+        GEL->insert(curr_departure);    // NOT CORRECT, must change
        }
       
     } // end (2)
   
   // Generate statistics from event data
-  processStatistics();
+  processStats();
 }
 
 
