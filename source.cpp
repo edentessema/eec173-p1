@@ -74,7 +74,7 @@ int main()
       time = curr_event->event_time;
       
       updateStats();
-      --length();
+      --length;
       
         if (length == 0) break;
         
