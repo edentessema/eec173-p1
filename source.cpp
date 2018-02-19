@@ -12,7 +12,9 @@ Still to-do:
 #include "event.h"
 
 // Prototypes
-double nedt( double );
+void processArrival(Event*);
+void processDeparture(Event*);
+double nedt(double);
 
 int main() 
 {
@@ -41,23 +43,39 @@ int main()
     Event* curr_event = GEL->getFirst();    // NOT CORRECT, must change
     
     // Check if the event is an (1) arrival or a (2) departure
-    // (1) If event is an arrival
     if ( curr_event->getType() == 'a' ) {
       
-      // Update the current time
-      time = curr_event->getArrivalTime();
+      processArrival(curr_event);
+      
+    } // end (1)
+     
+    else {    
+      
+      processDeparture(curr_event);
+
+    } // end (2)
+  
+  // Generate statistics from event data
+  processStats();
+}
+
+
+void processArrival ( Event* cur_event )
+{
+  // Update the current time
+      time = cur_event->getArrivalTime();
 
       // Schedule the next arrival event
       double next_arrival_time = time + nedt(arrival_rate);
       double next_service_time = nedt(service_rate);
-      Event *new_arrival = new Event('a', next_arrival_time, next_service_time);
-      GEL->insert(new_arrival);       // NOT CORRECT, must change
+      Event *next_arrival = new Event('a', next_arrival_time, next_service_time);
+      GEL->insert(next_arrival);       // NOT CORRECT, must change
            
       // Process the current arrival event
       // Check if: (a) If the server is ready to transmit a packet, or (b) The server is busy
       // (a) Server isn't busy (no packets in queue or transmitter), so schedule a departure
       if ( length == 0 ) {
-        double curr_service_time = curr_event->getServiceTime();
+        double curr_service_time = cur_event->getServiceTime();
         double curr_departure_time = time + curr_service_time; 
         Event *curr_departure = new Event('d', 0, curr_service_time, curr_departure_time);
         GEL->insert(curr_departure);    // NOT CORRECT, must change
@@ -78,12 +96,12 @@ int main()
         } // end (b)
       
     } // end (1)
-    
-    // (2) If an event is a departure, process service completion
-    else {    
-      
-      // Update the current time
-      time = curr_event->getDepartureTime();
+}
+
+void processDeparture( Event* cur_event )
+{
+       // Update the current time
+      time = cur_event->getDepartureTime();
       
       updateStats();
  //     --length;
@@ -93,18 +111,13 @@ int main()
       else {
  //     --length;
         buffer->dequeue();
-        double curr_service_time = curr_event->getServiceTime();
+        double curr_service_time = cur_event->getServiceTime();
         double curr_departure_time = time + curr_service_time; 
         Event *curr_departure = new Event('d', 0, curr_service_time, curr_departure_time);
         GEL->insert(curr_departure);    // NOT CORRECT, must change
        }
       
-    } // end (2)
-  
-  // Generate statistics from event data
-  processStats();
 }
-
 
 double nedt( double rate )
 {
