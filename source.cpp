@@ -86,11 +86,12 @@ int main()
       time = curr_event->getDepartureTime();
       
       updateStats();
-      --length;
+ //     --length;
       
       if (length == 0) break;
         
       else {
+ //     --length;
         buffer->dequeue();
         double curr_service_time = curr_event->getServiceTime();
         double curr_departure_time = time + curr_service_time; 
