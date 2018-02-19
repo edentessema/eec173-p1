@@ -4,25 +4,24 @@
 class Event
 {
 public:
+  Event ( char ev_type, double arr_time, double ser_time, double dep_time, Event* prev, Event* next )
+  {
+    event_type = ev_type;
+    arrival_time = arr_time;
+    service_time = ser_time;
+    departure_time = dep_time;
+    prev_event = prev;
+    next_event = next;
+  }
 
 private:
+  char event_type;
   double arrival_time;
   double service_time;
-  char event_type;
+  double departure_time;
   Event *next_event;
   Event *previous_event;
 }
 
-class Arrival: public Event
-{
-public:
-  Arrival( char ev_type = 'a', double arr_time, double ser_time );
-}
-
-class Departure: public Event
-{
-public:
-  Departure( char ev_type = 'd', double dep_time );
-}
 
 #endif
