@@ -57,10 +57,10 @@ int main()
   
   // Generate statistics from event data
   processStats();
-}
+} // END MAIN
 
 
-void processArrival ( Event* cur_event )
+void processArrival( Event* cur_event )
 {
   // Update the current time
       time = cur_event->getArrivalTime();
