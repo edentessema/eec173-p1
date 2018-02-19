@@ -104,17 +104,4 @@ double nedt( double rate )
 }
   
 
-/* 
 
-Will need to create and initialize the following data structures:
-- Doubly linked list for events
-- Doubly linked list for GEL
-- Priority queue for buffer
-
-Will likely need to write the following functions:
-
-getEvent() --> To get an event from the GEL
-processArrival() --> To process arrivals
-processDeparture() --> To process departures
-
-*/
