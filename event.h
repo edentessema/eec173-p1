@@ -14,6 +14,7 @@ public:
     next_event = next;
   }
   char getType(void) { return event_type; }
+  double getTime(void) { return arrival_time; }
 
 private:
   char event_type;
