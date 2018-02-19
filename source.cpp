@@ -1,4 +1,12 @@
 // NON-FUNCTIONAL CODE
+/* Still needs:
+- Structure for GEL
+- Structure for Buffer
+- Stats methods
+
+Still to-do:
+- Flesh out Event
+*/
 
 #include
 #include "event.h"
