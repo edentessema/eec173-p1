@@ -4,7 +4,7 @@
 class Event
 {
 public:
-  Event ( char ev_type, double arr_time, double ser_time, double dep_time, Event* prev, Event* next )
+  Event ( char ev_type, double arr_time = 0, double ser_time = 0, double dep_time = 0, Event* prev = NULL, Event* next = NULL )
   {
     event_type = ev_type;
     arrival_time = arr_time;
