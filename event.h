@@ -13,6 +13,7 @@ public:
     prev_event = prev;
     next_event = next;
   }
+  char getType(void) { return event_type; }
 
 private:
   char event_type;
