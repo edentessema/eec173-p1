@@ -19,6 +19,11 @@ double nedt(double);
 int main() 
 {
   // Initialize data structures
+  Event *headGEL = NULL;    //initializing head of GEL Queue
+  Event *tailGEL = NULL;    //initializing tail of GEL Queue
+  Event *headBuffer = NULL;    //initializing head of Buffer Queue
+  Event *tailBuffer = NULL;    //initializing tail of Buffer Queue
+
   
   // Initialize variables
   const int MAXBUFFER = 100;   // Maximum number of packets the buffer can hold (**set manually**)
@@ -33,8 +38,13 @@ int main()
   // Create first arrival event and insert into GEL
   double a1_arrival_time = time + nedt(arrival_rate);
   double a1_service_time = nedt(service_rate);
-  Event* a1 = new Event('a', a1_arrival_time, a1_service_time);       
-  GEL->insert(a1);    // NOT CORRECT, must change
+  Event* a1 = new Event('a', a1_arrival_time, a1_service_time);      
+
+  // if you agree with how insertGEL looks :D
+  insertGEL (a1, headGEL, tailGEL);                   // insert function for insert into GEL
+                                                      // pass in event node, head of GEL, and tail of GEL
+  
+  // implemented in line above: GEL->insert(a1);    // NOT CORRECT, must change
   
   
   // Generate event data
@@ -69,7 +79,10 @@ void processArrival( Event* cur_event )
       double next_arrival_time = time + nedt(arrival_rate);
       double next_service_time = nedt(service_rate);
       Event *next_arrival = new Event('a', next_arrival_time, next_service_time);
-      GEL->insert(next_arrival);       // NOT CORRECT, must change
+     
+      // if you agree with how insertGEL looks :D
+      insertGEL (next_arrival, headGEL, tailGEL);
+      //implemented in line above: GEL->insert(next_arrival);       // NOT CORRECT, must change
            
       // Process the current arrival event
       // Check if: (a) If the server is ready to transmit a packet, or (b) The server is busy
@@ -78,14 +91,20 @@ void processArrival( Event* cur_event )
         double curr_service_time = cur_event->getServiceTime();
         double curr_departure_time = time + curr_service_time; 
         Event *curr_departure = new Event('d', 0, curr_service_time, curr_departure_time);
-        GEL->insert(curr_departure);    // NOT CORRECT, must change
+        
+        // if you agree with how insertGEL looks :D
+        insertGEL (curr_departure, headGEL, tailGEL);
+        //implemented in line above: GEL->insert(curr_departure);    // NOT CORRECT, must change
         } // end (a)
       
       // (b) Server is busy
       else {
         // Place packet in queue
         if ( length-1 < MAXBUFFER )
-          buffer->insert();           // NOT CORRECT, must change
+          
+          //if you agree with how insertBuffer looks :D
+          insertBuffer(cur_event, headBuffer, tailBuffer);
+          // implemented in the line above: buffer->insert();           // NOT CORRECT, must change
         
         // Queue is full so drop the packet
         else
@@ -110,13 +129,56 @@ void processDeparture( Event* cur_event )
         
       else {
  //     --length;
-        buffer->dequeue();
+        buffer->dequeue();                                      /* NEED TO GRAB GENERAL DEQUEUE METHOD*/
         double curr_service_time = cur_event->getServiceTime();
         double curr_departure_time = time + curr_service_time; 
         Event *curr_departure = new Event('d', 0, curr_service_time, curr_departure_time);
-        GEL->insert(curr_departure);    // NOT CORRECT, must change
+      
+        // if you agree with how insertGEL looks :D
+        insertGEL (curr_departure, headGEL, tailGEL);
+        //implemented in line above: GEL->insert(curr_departure);    // NOT CORRECT, must change
        }
       
+}
+
+void insertGEL(Event *e_insert, Event *&head, Event *&tail)
+{
+  if (head == NULL && tail == NULL)
+  {
+    head = e_insert;
+    tail = e_insert;
+  } else {
+    Event *iterator = head;         //create pointer to iterate through queue to check priority
+    
+    while (iterator->service_time < e_insert->service_time)
+      {iterator = iterator->next_event;}          // increment iterator until the priority is reached/just-passed
+    if (iterator->service_time > e_insert->service_time)
+    {
+      head = e_insert;
+      e_insert->next_event = iterator;
+      iterator->previous_event = e_insert;
+    }
+    /* NOTE TO ALYSIA */
+    // I was considering inserting a condition for when the time being inserted is equal to oe tha talready exists in the GEL
+    // If so, how would we want to prioritize this? Would we want to maybe do a check as to whether we're comparing arrivals 
+    // (if so just put the newer insert behind) or if we're comparing an arrival and departure (then would we want the 
+    // departure to be scheduled first or the arrival)?
+  }
+}
+
+/*THIS insertBuffer() CAN ALSO BE REPLACED WITH A REGULAR ENQUEUE IF WE FIND ONE*/
+void insertBuffer(Event *e_insert, Event *&head, Event *&tail)
+{
+  Event *temp  = tail;
+  if (head == NULL && tail == NULL)
+  {
+    head = e_insert;
+    tail = e_insert;
+  } else {
+      tail = e_insert;
+      tail->previous_event = temp;
+      temp->next_event = e_insert;
+  }
 }
 
 double nedt( double rate )
