@@ -14,7 +14,7 @@ void processArrival(Event*);
 void processDeparture(Event*);
 void insertGEL(Event *, Event *&, Event *&);
 void insertBuffer(Event *, Event *&, Event *&);
-Event* removeEvent(Event *, Event *&);
+Event* removeEvent(Event *&);
 double nedt(double);
 
 int main() 
@@ -52,8 +52,8 @@ int main()
   for ( i = 0; i < 100000; ++i ) {
 
     // "getFirst" implemented by a dequeue from GEL
-    
-    Event* curr_event = GEL->getFirst();    // NOT CORRECT, must change
+    Event* curr_event = removeEvent(headGEL);
+    // implemented in line above: Event* curr_event = GEL->getFirst();    // NOT CORRECT, must change
     
     // Check if the event is an (1) arrival or a (2) departure
     if ( curr_event->getType() == 'a' ) {
@@ -132,6 +132,7 @@ void processDeparture( Event* cur_event )
         
       else {
  //     --length;
+        //deque
         buffer->dequeue();                                      /* NEED TO GRAB GENERAL DEQUEUE METHOD*/
         double curr_service_time = cur_event->getServiceTime();
         double curr_departure_time = time + curr_service_time; 
@@ -179,7 +180,7 @@ void insertBuffer(Event *e_insert, Event *&head, Event *&tail)
   }
 }
 
-Event* removeEvent(Event *e_removed, Event *&head)
+Event* removeEvent(Event *&head)
 {
   Event *temp = head;
   
