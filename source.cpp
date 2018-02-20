@@ -133,11 +133,20 @@ void processDeparture( Event* cur_event )
       else {
  //     --length;
         //deque
-        buffer->dequeue();                                      /* NEED TO GRAB GENERAL DEQUEUE METHOD*/
+        
+        
+        Event *curr_departure = removeEvent(headBuffer);          // creating/scheduling next departure event
+        // since the event that was in the queue was an arrival event, need to modify type to departure and adjust type time to include current time
+        curr_departure->event_type = 'd';
+        curr_departure->type_time = time + curr_departure->getServiceTime();
+        --length;
+        
+        /*
+        buffer->dequeue();                                      
         double curr_service_time = cur_event->getServiceTime();
         double curr_departure_time = time + curr_service_time; 
-        Event *curr_departure = new Event('d', 0, curr_service_time, curr_departure_time);
-      
+        Event *curr_departure = new Event('d', 0, curr_service_time, curr_departure_time);*/
+        
         // if you agree with how insertGEL looks :D
         insertGEL (curr_departure, headGEL, tailGEL);
         //implemented in line above: GEL->insert(curr_departure);    // NOT CORRECT, must change
