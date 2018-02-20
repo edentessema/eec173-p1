@@ -123,7 +123,7 @@ void processArrival( Event* cur_event )
 void processDeparture( Event* cur_event )
 {
        // Update the current time
-      time = cur_event->getDepartureTime();
+      time = cur_event->getTypeTime();
       
       updateStats();
  //     --length;
