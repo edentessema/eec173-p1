@@ -1,7 +1,5 @@
 // NON-FUNCTIONAL CODE
 /* Still needs:
-- Structure for GEL
-- Structure for Buffer
 - Stats methods
 
 Still to-do:
@@ -14,6 +12,9 @@ Still to-do:
 // Prototypes
 void processArrival(Event*);
 void processDeparture(Event*);
+void insertGEL(Event *, Event *&, Event *&);
+void insertBuffer(Event *, Event *&, Event *&);
+Event* removeEvent(Event *, Event *&);
 double nedt(double);
 
 int main() 
@@ -50,6 +51,8 @@ int main()
   // Generate event data
   for ( i = 0; i < 100000; ++i ) {
 
+    // "getFirst" implemented by a dequeue from GEL
+    
     Event* curr_event = GEL->getFirst();    // NOT CORRECT, must change
     
     // Check if the event is an (1) arrival or a (2) departure
@@ -158,11 +161,6 @@ void insertGEL(Event *e_insert, Event *&head, Event *&tail)
       e_insert->next_event = iterator;
       iterator->previous_event = e_insert;
     }
-    /* NOTE TO ALYSIA */
-    // I was considering inserting a condition for when the time being inserted is equal to oe tha talready exists in the GEL
-    // If so, how would we want to prioritize this? Would we want to maybe do a check as to whether we're comparing arrivals 
-    // (if so just put the newer insert behind) or if we're comparing an arrival and departure (then would we want the 
-    // departure to be scheduled first or the arrival)?
   }
 }
 
@@ -180,6 +178,24 @@ void insertBuffer(Event *e_insert, Event *&head, Event *&tail)
       temp->next_event = e_insert;
   }
 }
+
+Event* removeEvent(Event *e_removed, Event *&head)
+{
+  Event *temp = head;
+  
+  if(!is.empty())
+  {
+    head = head->next_event;
+    head->previous_event = NULL;
+    temp->next_event = NULL;
+    return temp;
+  } else {
+    cout << "empty queue. returning passed in head";
+    return temp;
+  }
+  
+}
+
 
 double nedt( double rate )
 {
